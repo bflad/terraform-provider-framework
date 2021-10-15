@@ -19,6 +19,7 @@ jobs:
         run: echo "::set-output name=version::$(cat ./.go-version)"
   terraform-provider-release:
     name: 'Terraform Provider Release'
+    needs: go-version
     uses: bflad/ghaction-terraform-provider-release/.github/workflows/community.yml@main
     secrets:
       gpg-private-key: '${{ secrets.GPG_PRIVATE_KEY }}'
