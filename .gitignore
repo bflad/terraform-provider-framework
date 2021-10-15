@@ -1,5 +1,6 @@
 .DS_Store
 .terraform/
 *.tfstate
+*_manifest.json
 dist/
 terraform-provider-framework

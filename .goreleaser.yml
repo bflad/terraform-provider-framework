@@ -5,8 +5,7 @@ archives:
     name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
 before:
   hooks:
-    - go mod download
-    - cp terraform-registry-manifest.json {{ .ProjectName }}_{{ .Version }}_manifest.json
+    - 'go mod download'
 builds:
   - env:
       - CGO_ENABLED=0
@@ -37,7 +36,8 @@ changelog:
 checksum:
   algorithm: sha256
   extra_files:
-    - '{{ .ProjectName }}_{{ .Version }}_manifest.json'
+    # Cannot use templates (e.g. {{ .ProjectName }}_{{ .Version }}_manifest.json)
+    - glob: 'terraform-provider-*_*_manifest.json'
   name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
 # publishers:
 #   - checksum: true
@@ -50,18 +50,19 @@ checksum:
 #     signature: true
 release:
   extra_files:
-    - '{{ .ProjectName }}_{{ .Version }}_manifest.json'
+    # Cannot use templates (e.g. {{ .ProjectName }}_{{ .Version }}_manifest.json)
+    - glob: 'terraform-provider-*_*_manifest.json'
   # ids:
   #   - none
 signs:
   - args:
       - "--batch"
-      - "--detach-sign"
-      - "${artifact}"
       - "--local-user"
       - "{{ .Env.GPG_FINGERPRINT }}"
       - "--output"
       - "${signature}"
+      - "--detach-sign"
+      - "${artifact}"
     artifacts: checksum
   # - args: ["sign", "--dearmor", "--file", "${artifact}", "--out", "${signature}"]
   #   artifacts: checksum
