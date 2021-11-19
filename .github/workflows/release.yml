@@ -37,5 +37,6 @@ jobs:
     secrets:
       gpg-private-key: '${{ secrets.GPG_PRIVATE_KEY }}'
     with:
+      release-notes: true
       setup-go-version: '${{ needs.go-version.outputs.version }}'
       terraform-registry-manifest-source: 'terraform-registry-manifest.json'
