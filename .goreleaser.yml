@@ -31,8 +31,6 @@ builds:
     ldflags:
       - -s -w -X main.Version={{.Version}}
     mod_timestamp: '{{ .CommitTimestamp }}'
-changelog:
-  skip: true
 checksum:
   algorithm: sha256
   extra_files:
