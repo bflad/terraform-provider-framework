@@ -34,8 +34,8 @@ builds:
 checksum:
   algorithm: sha256
   extra_files:
-    # Cannot use templates (e.g. {{ .ProjectName }}_{{ .Version }}_manifest.json)
-    - glob: 'terraform-provider-*_*_manifest.json'
+    - glob: 'terraform-registry-manifest.json'
+      name_template: '{{ .ProjectName }}_{{ .Version }}_manifest.json'
   name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
 # publishers:
 #   - checksum: true
@@ -48,8 +48,8 @@ checksum:
 #     signature: true
 release:
   extra_files:
-    # Cannot use templates (e.g. {{ .ProjectName }}_{{ .Version }}_manifest.json)
-    - glob: 'terraform-provider-*_*_manifest.json'
+    - glob: 'terraform-registry-manifest.json'
+      name_template: '{{ .ProjectName }}_{{ .Version }}_manifest.json'
   # ids:
   #   - none
 signs:

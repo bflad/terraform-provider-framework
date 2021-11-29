@@ -1,3 +1,7 @@
+# 0.1.3
+
+Testing new release with goreleaser extra_files remapping
+
 # 0.1.2
 
 Testing new release with release notes enabled
