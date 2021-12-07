@@ -33,7 +33,7 @@ jobs:
   terraform-provider-release:
     name: 'Terraform Provider Release'
     needs: [go-version, release-notes]
-    uses: bflad/ghaction-terraform-provider-release/.github/workflows/community.yml@main
+    uses: hashicorp/ghaction-terraform-provider-release/.github/workflows/community.yml@v1
     secrets:
       gpg-private-key: '${{ secrets.GPG_PRIVATE_KEY }}'
     with:
