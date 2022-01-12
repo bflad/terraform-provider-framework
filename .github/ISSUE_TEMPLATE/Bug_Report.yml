@@ -22,6 +22,8 @@ body:
       label: Terraform Configuration
       description: Please copy and paste any relevant Terraform configuration. This will be automatically formatted into code, so no need for backticks.
       render: terraform
+    validations:
+      required: true
   - type: textarea
     id: expected-behavior
     attributes:
