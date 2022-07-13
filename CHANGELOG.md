@@ -1,3 +1,6 @@
+# 0.1.4
+
+Testing release workflow
 # 0.1.3
 
 Testing new release with goreleaser extra_files remapping
