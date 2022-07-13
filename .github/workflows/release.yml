@@ -30,12 +30,40 @@ jobs:
           name: release-notes
           path: release-notes.txt
           retention-days: 1
+  # terraform-provider-release:
+  #   name: 'Terraform Provider Release'
+  #   needs: [go-version, release-notes]
+  #   uses: hashicorp/ghaction-terraform-provider-release/.github/workflows/community.yml@v1
+  #   secrets:
+  #     gpg-private-key: '${{ secrets.GPG_PRIVATE_KEY }}'
+  #   with:
+  #     release-notes: true
+  #     setup-go-version: '${{ needs.go-version.outputs.version }}'
   terraform-provider-release:
-    name: 'Terraform Provider Release'
     needs: [go-version, release-notes]
-    uses: hashicorp/ghaction-terraform-provider-release/.github/workflows/community.yml@v1
-    secrets:
-      gpg-private-key: '${{ secrets.GPG_PRIVATE_KEY }}'
-    with:
-      release-notes: true
-      setup-go-version: '${{ needs.go-version.outputs.version }}'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '${{ needs.go-version.outputs.version }}'
+      - name: Import GPG key
+        id: import_gpg
+        uses: hashicorp/ghaction-import-gpg@v2.1.0
+        env:
+          GPG_PRIVATE_KEY: '${{ secrets.GPG_PRIVATE_KEY }}'
+      - id: release-notes-download
+        name: Release Notes Download
+        uses: actions/download-artifact@v2
+        with:
+          name: release-notes
+          path: /tmp
+      - name: goreleaser release (with release notes)
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          args: release --release-notes ${{ steps.release-notes-download.outputs.download-path }}/release-notes.txt --rm-dist ${{ inputs.goreleaser-release-args }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
