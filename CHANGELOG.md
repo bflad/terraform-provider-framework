@@ -1,3 +1,7 @@
+# 0.1.6
+
+Use crazy-max/ghaction-import-gpg@v5
+
 # 0.1.5
 
 Test release using local workflow
