@@ -4,13 +4,34 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type optionalTypesResourceType struct{}
+var (
+	_ resource.Resource = &optionalTypesResource{}
+)
 
-func (t optionalTypesResourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewOptionalTypesResource() resource.Resource {
+	return &optionalTypesResource{}
+}
+
+type optionalTypesResource struct{}
+
+type optionalTypesResourceTypeData struct {
+	ID                   string        `tfsdk:"id"`
+	OptionalTypesBool    types.Bool    `tfsdk:"optional_types_bool"`
+	OptionalTypesFloat64 types.Float64 `tfsdk:"optional_types_float64"`
+	OptionalTypesInt64   types.Int64   `tfsdk:"optional_types_int64"`
+	OptionalTypesString  types.String  `tfsdk:"optional_types_string"`
+}
+
+func (r *optionalTypesResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_optional_types"
+}
+
+func (r *optionalTypesResource) GetSchema(_ context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -37,39 +58,21 @@ func (t optionalTypesResourceType) GetSchema(ctx context.Context) (tfsdk.Schema,
 	}, nil
 }
 
-func (t optionalTypesResourceType) NewResource(ctx context.Context, p tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	return optionalTypesResource{}, nil
-}
-
-type optionalTypesResourceTypeData struct {
-	ID                   string        `tfsdk:"id"`
-	OptionalTypesBool    types.Bool    `tfsdk:"optional_types_bool"`
-	OptionalTypesFloat64 types.Float64 `tfsdk:"optional_types_float64"`
-	OptionalTypesInt64   types.Int64   `tfsdk:"optional_types_int64"`
-	OptionalTypesString  types.String  `tfsdk:"optional_types_string"`
-}
-
-type optionalTypesResource struct{}
-
-func (r optionalTypesResource) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r optionalTypesResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	data := optionalTypesResourceTypeData{
 		ID: "testing",
 	}
 	resp.Diagnostics.Append(resp.State.Set(ctx, data)...)
 }
 
-func (r optionalTypesResource) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r optionalTypesResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	// Intentionally blank for testing.
 }
 
-func (r optionalTypesResource) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r optionalTypesResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	// Intentionally blank for testing.
 }
 
-func (r optionalTypesResource) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r optionalTypesResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	// Intentionally blank for testing.
-}
-
-func (r optionalTypesResource) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStateNotImplemented(ctx, "intentionally not implementated", resp)
 }

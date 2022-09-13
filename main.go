@@ -6,15 +6,15 @@ import (
 	"os"
 
 	"github.com/bflad/terraform-provider-framework/internal/provider"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
 
 //go:generate terraform fmt -recursive ./examples/
 //go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
 
 func main() {
-	err := tfsdk.Serve(context.Background(), provider.New, tfsdk.ServeOpts{
-		Name: "bflad/framework",
+	err := providerserver.Serve(context.Background(), provider.New, providerserver.ServeOpts{
+		Address: "registry.terraform.io/bflad/framework",
 	})
 
 	if err != nil {

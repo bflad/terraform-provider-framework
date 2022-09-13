@@ -4,13 +4,32 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type importResourceType struct{}
+var (
+	_ resource.Resource                = &importResource{}
+	_ resource.ResourceWithImportState = &importResource{}
+)
 
-func (t importResourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewImportResource() resource.Resource {
+	return &importResource{}
+}
+
+type importResource struct{}
+
+type importResourceTypeData struct {
+	ID string `tfsdk:"id"`
+}
+
+func (r *importResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_import"
+}
+
+func (r *importResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		Attributes: map[string]tfsdk.Attribute{
 			"id": {
@@ -21,27 +40,14 @@ func (t importResourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.D
 	}, nil
 }
 
-func (t importResourceType) NewResource(ctx context.Context, p tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	return importResource{}, nil
+func (r *importResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 }
-
-type importResourceTypeData struct {
-	ID string `tfsdk:"id"`
+func (r *importResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 }
-
-type importResource struct{}
-
-func (r importResource) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *importResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 }
-func (r importResource) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *importResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 }
-func (r importResource) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
-}
-func (r importResource) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
-}
-func (r importResource) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	state := importResourceTypeData{
-		ID: req.ID,
-	}
-	resp.Diagnostics.Append(resp.State.Set(ctx, state)...)
+func (r *importResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
