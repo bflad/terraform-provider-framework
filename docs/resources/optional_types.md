@@ -17,13 +17,13 @@ description: |-
 
 ### Optional
 
-- **optional_types_bool** (Boolean)
-- **optional_types_float64** (Number)
-- **optional_types_int64** (Number)
-- **optional_types_string** (String)
+- `optional_types_bool` (Boolean)
+- `optional_types_float64` (Number)
+- `optional_types_int64` (Number)
+- `optional_types_string` (String)
 
 ### Read-Only
 
-- **id** (String) The ID of this resource.
+- `id` (String) The ID of this resource.
 
 

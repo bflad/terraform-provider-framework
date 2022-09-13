@@ -17,4 +17,4 @@ description: |-
 
 ### Optional
 
-- **example** (String)
+- `example` (String)
