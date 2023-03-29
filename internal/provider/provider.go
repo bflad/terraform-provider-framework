@@ -4,16 +4,13 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
+	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 var (
-	_ provider.Provider             = &frameworkProvider{}
-	_ provider.ProviderWithMetadata = &frameworkProvider{}
+	_ provider.Provider = &frameworkProvider{}
 )
 
 func New() provider.Provider {
@@ -26,15 +23,14 @@ func (p *frameworkProvider) Metadata(_ context.Context, req provider.MetadataReq
 	resp.TypeName = "framework"
 }
 
-func (p *frameworkProvider) GetSchema(_ context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
-		Attributes: map[string]tfsdk.Attribute{
-			"example": {
-				Type:     types.StringType,
+func (p *frameworkProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp *provider.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Attributes: map[string]schema.Attribute{
+			"example": schema.StringAttribute{
 				Optional: true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (p *frameworkProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
@@ -43,11 +39,12 @@ func (p *frameworkProvider) Configure(ctx context.Context, req provider.Configur
 
 func (p *frameworkProvider) Resources(_ context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewImportResource,
-		NewOptionalTypesResource,
+		NewExampleResource,
 	}
 }
 
 func (p *frameworkProvider) DataSources(_ context.Context) []func() datasource.DataSource {
-	return nil
+	return []func() datasource.DataSource{
+		NewExampleDataSource,
+	}
 }
