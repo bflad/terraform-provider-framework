@@ -37,21 +37,10 @@ checksum:
     - glob: 'terraform-registry-manifest.json'
       name_template: '{{ .ProjectName }}_{{ .Version }}_manifest.json'
   name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
-# publishers:
-#   - checksum: true
-#     cmd: hc-releases upload-file {{ abs .ArtifactPath }}
-#     env:
-#       - AWS_ACCESS_KEY_ID={{ .Env.AWS_ACCESS_KEY_ID }}
-#       - AWS_SECRET_ACCESS_KEY={{ .Env.AWS_SECRET_ACCESS_KEY }}
-#       - AWS_SESSION_TOKEN={{ .Env.AWS_SESSION_TOKEN }}
-#     name: hc-releases
-#     signature: true
 release:
   extra_files:
     - glob: 'terraform-registry-manifest.json'
       name_template: '{{ .ProjectName }}_{{ .Version }}_manifest.json'
-  # ids:
-  #   - none
 signs:
   - args:
       - "--batch"
@@ -62,9 +51,5 @@ signs:
       - "--detach-sign"
       - "${artifact}"
     artifacts: checksum
-  # - args: ["sign", "--dearmor", "--file", "${artifact}", "--out", "${signature}"]
-  #   artifacts: checksum
-  #   cmd: signore
-  #   signature: ${artifact}.72D7468F.sig
 snapshot:
   name_template: "{{ .Tag }}-next"
