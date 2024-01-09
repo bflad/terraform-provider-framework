@@ -4,13 +4,15 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/function"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 )
 
 var (
-	_ provider.Provider = &frameworkProvider{}
+	_ provider.Provider              = &frameworkProvider{}
+	_ provider.ProviderWithFunctions = &frameworkProvider{}
 )
 
 func New() provider.Provider {
@@ -46,5 +48,11 @@ func (p *frameworkProvider) Resources(_ context.Context) []func() resource.Resou
 func (p *frameworkProvider) DataSources(_ context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewExampleDataSource,
+	}
+}
+
+func (p *frameworkProvider) Functions(_ context.Context) []func() function.Function {
+	return []func() function.Function{
+		NewExampleFunction,
 	}
 }
