@@ -1,3 +1,7 @@
+# 0.2.0
+
+Add example function
+
 # 0.1.6
 
 Use crazy-max/ghaction-import-gpg@v5
