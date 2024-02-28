@@ -37,11 +37,11 @@ func (r ExampleFunction) Definition(_ context.Context, _ function.DefinitionRequ
 func (r ExampleFunction) Run(ctx context.Context, req function.RunRequest, resp *function.RunResponse) {
 	var data string
 
-	resp.Diagnostics.Append(req.Arguments.Get(ctx, &data)...)
+	resp.Error = function.ConcatFuncErrors(req.Arguments.Get(ctx, &data))
 
-	if resp.Diagnostics.HasError() {
+	if resp.Error != nil {
 		return
 	}
 
-	resp.Diagnostics.Append(resp.Result.Set(ctx, data)...)
+	resp.Error = function.ConcatFuncErrors(resp.Result.Set(ctx, data))
 }
